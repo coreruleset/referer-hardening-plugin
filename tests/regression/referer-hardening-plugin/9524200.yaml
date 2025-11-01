@@ -2,23 +2,22 @@
 meta:
   author: "azurit"
   description: "Referer Hardening Plugin"
-  enabled: true
-  name: 9524200.yaml
+test_id: 9524200
 tests:
-  - test_title: 9524200-1
+  - test_id: 1
     desc: "Empty Referer, PL2"
     stages:
-      - stage:
-          input:
-            dest_addr: 127.0.0.1
-            headers:
-              Host: localhost
-              User-Agent: OWASP CRS test agent
-              Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
-              Referer: ""
-            port: 80
-            method: "GET"
-            uri: "/get"
-            version: "HTTP/1.1"
-          output:
-            log_contains: id "9524200"
+      - input:
+          dest_addr: 127.0.0.1
+          headers:
+            Host: localhost
+            User-Agent: OWASP CRS test agent
+            Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            Referer: ""
+          port: 80
+          method: "GET"
+          uri: "/get"
+          version: "HTTP/1.1"
+        output:
+          log:
+            expect_ids: [9524200]
