@@ -39,7 +39,7 @@ tests:
           log:
             expect_ids: [9524170]
   - test_id: 3
-    desc: "Valid domain 2"
+    desc: "Valid domain 2: Usage of _ in domain names is not recommended for use on web but allowed and supported by DNS and web servers"
     stages:
       - input:
           dest_addr: 127.0.0.1
