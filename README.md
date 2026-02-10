@@ -35,7 +35,7 @@ If you are running with a higher [Anomaly Threshold](https://coreruleset.org/doc
 
 ## License
 
-Copyright (c) 2025 OWASP CRS project. All rights reserved.
+Copyright (c) 2025-2026 OWASP CRS project. All rights reserved.
 
 The OWASP CRS and its official plugins are distributed
 under Apache Software License (ASL) version 2. Please see the enclosed LICENSE
