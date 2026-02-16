@@ -1,0 +1,75 @@
+---
+meta:
+  author: "azurit"
+  description: "Referer Hardening Plugin"
+test_id: 9524210
+tests:
+  - test_id: 1
+    desc: "Valid port"
+    stages:
+      - input:
+          dest_addr: 127.0.0.1
+          headers:
+            Host: localhost
+            User-Agent: OWASP CRS test agent
+            Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            Referer: "http://example.com:80"
+          port: 80
+          method: "GET"
+          uri: "/get"
+          version: "HTTP/1.1"
+        output:
+          log:
+            no_expect_ids: [9524210]
+  - test_id: 2
+    desc: "Missing port"
+    stages:
+      - input:
+          dest_addr: 127.0.0.1
+          headers:
+            Host: localhost
+            User-Agent: OWASP CRS test agent
+            Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            Referer: "http://example.com"
+          port: 80
+          method: "GET"
+          uri: "/get"
+          version: "HTTP/1.1"
+        output:
+          log:
+            no_expect_ids: [9524210]
+  - test_id: 3
+    desc: "Invalid port"
+    stages:
+      - input:
+          dest_addr: 127.0.0.1
+          headers:
+            Host: localhost
+            User-Agent: OWASP CRS test agent
+            Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            Referer: "http://example.com:0"
+          port: 80
+          method: "GET"
+          uri: "/get"
+          version: "HTTP/1.1"
+        output:
+          log:
+            expect_ids: [9524210]
+  - test_id: 4
+    desc: "Port may be 'overwritten' by other CRS rules in some special cases, see https://github.com/coreruleset/referer-hardening-plugin/issues/5"
+    stages:
+      - input:
+          dest_addr: 127.0.0.1
+          headers:
+            Host: localhost
+            User-Agent: OWASP CRS test agent
+            Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            Range: bytes=0-0
+            Referer: "http://example.com/"
+          port: 80
+          method: "GET"
+          uri: "/get"
+          version: "HTTP/1.1"
+        output:
+          log:
+            no_expect_ids: [9524210]
