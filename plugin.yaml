@@ -1,0 +1,60 @@
+# OWASP CRS Plugin Descriptor
+# See plugin-schema.json for the full JSON Schema definition.
+# Docs: https://github.com/coreruleset/plugin-registry
+
+schema_version: 1
+
+plugin:
+  name: "referer-hardening-plugin"
+  description: "Validates the syntax of the Referer HTTP header and exposes its components to other CRS rules."
+  long_description: |
+    Introduces stricter validation of the Referer HTTP header in compliance
+    with the relevant RFC specifications (RFC 9110 and RFC 3986).
+
+    The plugin verifies the syntactic validity of the Referer header and
+    extracts its individual components (host, port, path, query) so they can
+    be appended to the inspection targets of other CRS rules, such as those
+    detecting SQL injection or other common web attacks. This ensures that
+    malicious payloads embedded in the Referer header are not ignored and are
+    inspected by the existing CRS ruleset.
+
+    The plugin also uses the SecRuleUpdateTargetById directive to add the
+    parsed Referer components as inspection targets. This mechanism cannot be
+    disabled via the plugin's enable/disable toggle; to fully disable it, the
+    plugin must be removed from the configuration entirely.
+  type: "official"
+  category: "protection"
+  status: "tested"
+  license: "Apache-2.0"
+  authors:
+    - name: "OWASP CRS Team"
+      url: "https://coreruleset.org"
+  repository: "https://github.com/coreruleset/referer-hardening-plugin"
+  keywords:
+    - "referer"
+    - "http-headers"
+    - "header-validation"
+    - "rfc-compliance"
+
+# Registered rule ID range from the plugin registry
+rule_id_range:
+  start: 9524000
+  end: 9524999
+
+# No `engines` key: plain ModSecurity rules, no engine-specific mechanism.
+# CI (integration.yml) only tests against CRS main and the current LTS (v4.x).
+compatibility:
+  crs_version: ">=4.0.0"
+
+# Configuration variables exposed by the plugin
+configuration:
+  file: "plugins/referer-hardening-config.conf"
+  variables:
+    - name: "tx.referer-hardening-plugin_enabled"
+      type: "boolean"
+      default: 1
+      description: >-
+        Enable or disable the plugin (0 to disable). Note: target additions
+        made via SecRuleUpdateTargetById are not undone by this toggle; to
+        fully disable the plugin, remove it from the configuration entirely.
+      required: false
